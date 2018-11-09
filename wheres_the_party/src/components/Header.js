@@ -16,6 +16,7 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
+import { Link } from 'react-router-dom';
 
 const styles = theme => ({
   root: {
@@ -166,9 +167,11 @@ class Header extends React.Component {
       <div className={classes.root}>
         <AppBar position="static">
           <Toolbar>
-            <Typography className={classes.title} variant="h6" color="inherit" noWrap>
-              Wheres the party?
-            </Typography>
+          <Link to="/" style={{ textDecoration: 'none', color:'white'  }}>
+              <Typography className={classes.title} variant="h6" color="inherit" noWrap>
+                Wheres the party?
+              </Typography>
+            </Link>
             <div className={classes.search}>
               <div className={classes.searchIcon}>
                 <SearchIcon />
