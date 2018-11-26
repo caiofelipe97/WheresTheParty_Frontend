@@ -125,7 +125,10 @@ class Header extends React.Component {
         open={isMenuOpen}
         onClose={this.handleMenuClose}
       >
-        <MenuItem onClick={this.handleMenuClose}>Profile</MenuItem>
+        <Link to={`/login`} style={{ textDecoration: 'none', color:'white'}}>
+         <MenuItem onClick={this.handleMenuClose}>Login</MenuItem>
+        </Link>
+
         <MenuItem onClick={this.handleMenuClose}>My account</MenuItem>
       </Menu>
     );
@@ -171,6 +174,7 @@ class Header extends React.Component {
               <Typography className={classes.title} variant="h6" color="inherit" noWrap>
                 Wheres the party?
               </Typography>
+              
             </Link>
             <div className={classes.search}>
               <div className={classes.searchIcon}>
@@ -184,6 +188,8 @@ class Header extends React.Component {
                 }}
                 onChange = {(event)=> console.log(event.target.value)}
               />
+
+              
             </div>
             <div className={classes.grow} />
             <div className={classes.sectionDesktop}>
@@ -213,5 +219,5 @@ class Header extends React.Component {
 Header.propTypes = {
   classes: PropTypes.object.isRequired,
 };
-
+  
 export default withStyles(styles)(Header);

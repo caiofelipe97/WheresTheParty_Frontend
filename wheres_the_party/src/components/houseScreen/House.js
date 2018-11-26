@@ -17,6 +17,7 @@ import FavoriteIcon from "@material-ui/icons/Favorite";
 import ShareIcon from "@material-ui/icons/Share";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
+import Show from "./Show";
 
 const styles = theme => ({
   card: {
@@ -45,6 +46,10 @@ const styles = theme => ({
   },
   avatar: {
     backgroundColor: red[500]
+  },
+  show:{
+    display:'flex',
+    justifyContent: 'center'
   }
 });
 
@@ -58,9 +63,28 @@ class House extends React.Component {
         this.setState({ house: data.data })
         fetch("http://localhost:8080/party/"+ this.props.match.params.houseId)
           .then(response => response.json())
-          .then(data => this.setState({ shows: data.data}));
+          .then(data => this.setState({ shows: data.data},()=>{console.log(this.state.shows)}));
       });
   }
+
+  renderData(data) {
+    let dataFormated = new Date(data);
+    let year = dataFormated.getFullYear();
+    let month = dataFormated.getMonth();
+    let day = dataFormated.getDate();
+    console.log(dataFormated); 
+    console.log(month);
+    return(
+      
+      (year ? year : "") +
+                "/" +
+      (month ? (month + 1) : "") +
+                "/" +
+        (day ? day : "")
+      
+    )
+  }
+
   handleExpandClick = (e,index) => {
     console.log("entrou")
     console.log("chamou " + index)
@@ -89,12 +113,9 @@ class House extends React.Component {
            }}
               className={classes.button}
             >
-            
-              {show.date ? show.date : "" +
-                "/" +
-                (show.date? show.date.getMonth() + 1 : "") +
-                "/" +
-                show.date? show.date.getDate() : "" }
+              <div className={classes.show}>
+              {show.date ? this.renderData(show.date) : "" }
+              </div>
               <IconButton
                 className={classnames(classes.expand, {
                   [classes.expandOpen]: this.state.expanded[index]
@@ -107,10 +128,9 @@ class House extends React.Component {
             </Button>
           </CardActions>
           <Collapse in={this.state.expanded[index]} timeout="auto" unmountOnExit>
-            <CardContent>
-              <Typography paragraph>{this.state.shows[index].name}</Typography>
-              
-            </CardContent>
+          <div  className={classes.show}>
+            <Show key={ this.state.shows[index]._id} eCard name={this.state.shows[index].name} description={ this.state.shows[index].description } img = { this.state.shows[index].imageUrl}></Show>
+          </div>
           </Collapse>
         </div>
     ))
@@ -128,8 +148,9 @@ class House extends React.Component {
             {description}
           </Typography>
         </CardContent>
-        
-        { showList }
+        <div>
+          {(shows.length !=0) ? showList : <Typography component="p">NAO EXISTEM SHOWS</Typography> }
+        </div>
         
       </Card>
     );
