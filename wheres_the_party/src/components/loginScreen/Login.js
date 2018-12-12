@@ -35,23 +35,44 @@ const styles = theme => ({
   },
   title:{
     paddingTop:10
+  },
+  error:{
+    color: 'red',
+    fontWeight: 'bold'
   }
 });
 
 class Login extends Component {
   constructor(props){
     super(props);
+    this.state={
+    email:'',
+    password:''
+    }
   }
 
-  handleChange = name => event => {
-    this.setState({
-      [name]: event.target.value
-    });
-  };
+  login() {
+    console.log(this.state);
+    let body = {email: this.state.email, password: this.state.password};
+    fetch('http://localhost:8080/user/login', {
+      method: 'post',
+      headers: {
+        'Accept': 'application/json',
+        "Content-Type": "application/json; charset=UTF-8"
+      },
+      body: JSON.stringify(body)
+     }).then(response => response.json())
+     .then(data =>{
+       console.log(data);
+       if(data.error){
+        this.setState({error:data.error});
+       }
+     });
+  }
 
   render() {
     const { classes } = this.props;
-
+    const { error } = this.state;
     return (
       <div className={classes.container}  >
         <Card className={classes.card}>
@@ -59,25 +80,31 @@ class Login extends Component {
             Login
           </Typography>
           <form className={classes.form}   noValidate autoComplete="off">
-
             <TextField
-              id="standard-name"
-              label="Name"
+              id="standard-email-input"
+              label="Email"
               className={classes.textField}
-              onChange={this.handleChange('name')}
+              type="email"
+              name="email"
+              autoComplete="email"
               margin="normal"
+              value = { this.state.email}
+              onChange = {(e)=>{this.setState({email:e.target.value})}}
             />
-              <TextField
+            <TextField
               id="standard-password-input"
               label="Password"
               className={classes.textField}
               type="password"
               autoComplete="current-password"
               margin="normal"
+              onChange = {(e)=>{this.setState({password:e.target.value})}}
             />
-              <br/>
-              <br/>
-              <Button variant="contained" color="primary" className={classes.button}>
+            {error && (<Typography className={classes.error} variant="h6" gutterBottom>
+            {error}
+            <br/>
+          </Typography>)}
+            <Button variant="contained" color="primary" className={classes.button} onClick={ () => this.login() }>
               Login
             </Button>
           </form>

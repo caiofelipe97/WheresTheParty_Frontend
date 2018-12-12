@@ -17,6 +17,7 @@ import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import { Link } from 'react-router-dom';
+import { withRouter } from "react-router";
 
 const styles = theme => ({
   root: {
@@ -92,6 +93,7 @@ class Header extends React.Component {
   state = {
     anchorEl: null,
     mobileMoreAnchorEl: null,
+    searchValue: '',
   };
 
   handleProfileMenuOpen = event => {
@@ -111,9 +113,16 @@ class Header extends React.Component {
     this.setState({ mobileMoreAnchorEl: null });
   };
 
+  handleSearchValue = event => {
+    const search = event.target.value.replace(/[^a-zA-Z0-9]/g, '');
+    const { onSearchChange } = this.props;
+    onSearchChange(search);
+    this.setState({ searchValue: search });
+  };
+
   render() {
-    const { anchorEl, mobileMoreAnchorEl } = this.state;
-    const { classes } = this.props;
+    const { anchorEl, mobileMoreAnchorEl, searchValue } = this.state;
+    const { classes,location,onSearchChange } = this.props;
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
@@ -176,21 +185,21 @@ class Header extends React.Component {
               </Typography>
               
             </Link>
-            <div className={classes.search}>
+            {location.pathname === "/" ? <div className={classes.search}>
               <div className={classes.searchIcon}>
                 <SearchIcon />
               </div>
+    
               <InputBase
+                value={searchValue}
                 placeholder="Search…"
                 classes={{
                   root: classes.inputRoot,
                   input: classes.inputInput,
                 }}
-                onChange = {(event)=> console.log(event.target.value)}
+                onChange = {this.handleSearchValue}
               />
-
-              
-            </div>
+            </div> : null}
             <div className={classes.grow} />
             <div className={classes.sectionDesktop}>
               <IconButton
@@ -220,4 +229,4 @@ Header.propTypes = {
   classes: PropTypes.object.isRequired,
 };
   
-export default withStyles(styles)(Header);
+export default withStyles(styles)(withRouter(Header));

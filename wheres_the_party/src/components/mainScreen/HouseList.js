@@ -31,9 +31,9 @@ class HouseList extends Component {
 }
 
   render() {
-    const { classes } = this.props;
+    const { classes,search } = this.props;
     const { houses }= this.state;
-    const houseList = houses.map((house) =>(
+    const houseList = houses.filter( house => new RegExp(search,'i').test(house.name)).map( house =>(
       <Link key={ house._id} to={`/house/${house._id}`}>
         <HouseCard key={ house._id} eCard name={house.name} description={ house.description } img = { house.imageUrl}> </HouseCard>
       </Link>
