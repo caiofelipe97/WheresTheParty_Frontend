@@ -3,6 +3,7 @@ import HouseList from './components/mainScreen/HouseList';
 import House from './components/houseScreen/House';
 import Header from './components/Header';
 import Login from './components/loginScreen/Login';
+import ProfileScreen from './components/profileScreen/ProfileScreen';
 import { BrowserRouter as Router, Route} from 'react-router-dom';
 
 import './App.css';
@@ -28,6 +29,7 @@ class App extends Component {
           <Route exact={true} path="/"  render={(props) => (<HouseList {...props} search={search} />)}/>
           <Route path="/house/:houseId" component={House}/>
           <Route path="/login" component={Login} />
+          <Route path="/profile" component={ProfileScreen}/>
         </div>
       </Router>
       </div>

@@ -28,7 +28,7 @@ class HouseList extends Component {
     fetch('http://localhost:8080/house')
         .then(response => response.json())
         .then(data => this.setState({ houses: data.data}));
-}
+  }
 
   render() {
     const { classes,search } = this.props;

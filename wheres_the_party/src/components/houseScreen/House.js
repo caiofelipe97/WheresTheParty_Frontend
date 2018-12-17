@@ -54,7 +54,7 @@ const styles = theme => ({
 });
 
 class House extends React.Component {
-  state = { expanded: [false,false], house: {}, shows: [] };
+  state = { expanded: [], house: {}, shows: [] };
 
   componentDidMount() {
     fetch("http://localhost:8080/house/" + this.props.match.params.houseId)
@@ -63,7 +63,13 @@ class House extends React.Component {
         this.setState({ house: data.data })
         fetch("http://localhost:8080/party/"+ this.props.match.params.houseId)
           .then(response => response.json())
-          .then(data => this.setState({ shows: data.data},()=>{console.log(this.state.shows)}));
+          .then(data => this.setState({ shows: data.data},()=>{
+            let expandedList = []
+            for(let i=0;i < this.state.shows.length;i++){
+              expandedList.push(false)
+            }
+            this.setState({expanded:expandedList});  
+          }));
       });
   }
 
@@ -149,7 +155,7 @@ class House extends React.Component {
           </Typography>
         </CardContent>
         <div>
-          {(shows.length !=0) ? showList : <Typography component="p">NAO EXISTEM SHOWS</Typography> }
+          {(shows.length !=0) ? showList : <Typography component="p" style={{color:'red'}}>NÃO EXISTEM SHOWS CADASTRADOS</Typography> }
         </div>
         
       </Card>

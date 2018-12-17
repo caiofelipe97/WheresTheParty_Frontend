@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import Typography from '@material-ui/core/Typography';
+import { withRouter } from "react-router";
 
 
 const styles = theme => ({
@@ -66,6 +67,9 @@ class Login extends Component {
        console.log(data);
        if(data.error){
         this.setState({error:data.error});
+       } else {
+        localStorage.setItem('token', data.token);
+        this.props.history.push('/');
        }
      });
   }
@@ -121,4 +125,4 @@ Login.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(Login);
+export default withStyles(styles)(withRouter(Login));

@@ -119,12 +119,17 @@ class Header extends React.Component {
     onSearchChange(search);
     this.setState({ searchValue: search });
   };
+  handleLogout() {
+    localStorage.removeItem('token');
+    this.props.history.push('/');
+  }
 
   render() {
     const { anchorEl, mobileMoreAnchorEl, searchValue } = this.state;
     const { classes,location,onSearchChange } = this.props;
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+    const isLogged = Boolean(localStorage.getItem('token') && localStorage.getItem('token') !== 'undefined')
 
     const renderMenu = (
       <Menu
@@ -134,11 +139,15 @@ class Header extends React.Component {
         open={isMenuOpen}
         onClose={this.handleMenuClose}
       >
-        <Link to={`/login`} style={{ textDecoration: 'none', color:'white'}}>
-         <MenuItem onClick={this.handleMenuClose}>Login</MenuItem>
-        </Link>
-
-        <MenuItem onClick={this.handleMenuClose}>My account</MenuItem>
+       
+      
+        <Link to={`/profile`} style={{ textDecoration: 'none', color:'white'}}>
+        <MenuItem onClick={this.handleMenuClose}>My Party House</MenuItem>
+       </Link>
+       <MenuItem onClick={()=>{
+         this.handleLogout();
+         this.handleMenuClose();
+         }}>Logout</MenuItem>
       </Menu>
     );
 
@@ -201,21 +210,24 @@ class Header extends React.Component {
               />
             </div> : null}
             <div className={classes.grow} />
-            <div className={classes.sectionDesktop}>
-              <IconButton
-                aria-owns={isMenuOpen ? 'material-appbar' : undefined}
-                aria-haspopup="true"
-                onClick={this.handleProfileMenuOpen}
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
-            </div>
-            <div className={classes.sectionMobile}>
-              <IconButton aria-haspopup="true" onClick={this.handleMobileMenuOpen} color="inherit">
-                <MoreIcon />
-              </IconButton>
-            </div>
+            {isLogged ? 
+            <div>
+              <div className={classes.sectionDesktop}>
+                <IconButton
+                  aria-owns={isMenuOpen ? 'material-appbar' : undefined}
+                  aria-haspopup="true"
+                  onClick={this.handleProfileMenuOpen}
+                  color="inherit"
+                >
+                  <AccountCircle />
+                </IconButton>
+              </div>
+              <div className={classes.sectionMobile}>
+                <IconButton aria-haspopup="true" onClick={this.handleMobileMenuOpen} color="inherit">
+                  <MoreIcon />
+                </IconButton>
+              </div>
+            </div>: <Link to={`/login`} style={{ textDecoration: 'none', color:'white'}}>Login</Link>}
           </Toolbar>
         </AppBar>
         {renderMenu}
